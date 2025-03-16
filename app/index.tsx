@@ -1,9 +1,11 @@
 import { useState } from "react";
 import { View, TextInput, Button, StyleSheet, Text } from "react-native";
+import { useRouter } from "expo-router";
 
 export default function LoginScreen() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const router = useRouter();
 
   return (
     <View style={styles.container}>
@@ -26,7 +28,7 @@ export default function LoginScreen() {
         secureTextEntry
       />
 
-      <Button title="Login" onPress={() => console.log("Login pressed:", { email, password })} />
+      <Button title="Login" onPress={() => router.push("/qr")} />
     </View>
   );
 }
