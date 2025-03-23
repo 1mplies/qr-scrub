@@ -2,20 +2,37 @@ import { useState } from "react";
 import { View, TextInput, Button, StyleSheet, Text } from "react-native";
 import { useRouter } from "expo-router";
 
+const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
 export default function RegisterScreen() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [error, setError] = useState("");
   const router = useRouter();
 
   const handleRegister = () => {
-    if (email && password && password === confirmPassword) {
-      // You can add logic for actual registration here (e.g., sending data to an API)
-      alert("Registration successful!"); 
-      router.push("/login"); // Navigate to the login page after successful registration
-    } else {
-      alert("Please ensure all fields are filled and passwords match.");
+
+    if (!email || !emailRegex.test(email)) {
+      setError("Please enter a valid email address.");
+      return;
     }
+
+    // Check if password meets minimum length
+    if (password.length < 6) {
+      setError("Password must be at least 6 characters.");
+      return;
+    }
+
+    // Check if passwords match
+    if (password !== confirmPassword) {
+      setError("Passwords do not match.");
+      return;
+    }
+
+    setError("");
+    alert("Registration successful!"); 
+    router.push("/login"); // Navigate to the login page
   };
 
   return (
@@ -47,6 +64,8 @@ export default function RegisterScreen() {
         secureTextEntry
       />
 
+      {error && <Text style={styles.error}>{error}</Text>}
+
       <Button title="Register" onPress={handleRegister} />
 
       <View style={styles.loginContainer}>
@@ -63,7 +82,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     padding: 20,
-    backgroundColor: "#99CCFF", // Light Blue Background
+    backgroundColor: "#99CCFF",
   },
   title: { fontSize: 24, marginBottom: 20 },
   input: {
@@ -72,7 +91,12 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 5,
     marginBottom: 20,
-    backgroundColor: "#fff", // White background for input fields
+    backgroundColor: "#fff",
+  },
+  error: {
+    color: "red",
+    marginBottom: 20,
+    fontSize: 14,
   },
   loginContainer: {
     marginTop: 20,

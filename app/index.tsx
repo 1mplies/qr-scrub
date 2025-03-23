@@ -6,7 +6,7 @@ export default function Index() {
 
   return (
     <View style={styles.container}>
-      {/* Hospital Logo - Adjusted higher */}
+      {/* Hospital Logo */}
       <Image source={require("../assets/images/hospital_logo.png")} style={styles.logo} />
 
       {/* App Title */}
@@ -18,7 +18,6 @@ export default function Index() {
         just a few taps. Log in to get started.
       </Text>
 
-      {/* Larger Button */}
       <TouchableOpacity style={styles.loginButton} onPress={() => router.push("/login")}>
         <Text style={styles.loginButtonText}>Go to Login</Text>
       </TouchableOpacity>
@@ -32,19 +31,19 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     padding: 20,
-    backgroundColor: "#E3F2FD", // Light blue hospital theme
+    backgroundColor: "#E3F2FD",
   },
   logo: {
     width: 150,
     height: 150,
-    marginBottom: 10, // Reduced margin to move it up
-    marginTop: -40, // Moves logo higher
+    marginBottom: 10,
+    marginTop: -40,
   },
   title: {
     fontSize: 24,
     fontWeight: "bold",
     marginBottom: 10,
-    color: "#1565C0", // Dark blue title
+    color: "#1565C0",
   },
   description: {
     fontSize: 16,
@@ -53,14 +52,14 @@ const styles = StyleSheet.create({
     color: "#333",
   },
   loginButton: {
-    backgroundColor: "#1565C0", // Dark blue button
-    paddingVertical: 15, // Increased padding for larger button
+    backgroundColor: "#1565C0",
+    paddingVertical: 15,
     paddingHorizontal: 50,
     borderRadius: 10,
-    marginTop: 10, // Adds space from description
+    marginTop: 10,
   },
   loginButtonText: {
-    fontSize: 18, // Larger text
+    fontSize: 18,
     color: "#fff",
     fontWeight: "bold",
   },

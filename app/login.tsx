@@ -8,7 +8,7 @@ export default function LoginScreen() {
   const router = useRouter();
 
   const handleLogin = () => {
-    // Simple check for login logic, can be replaced with actual authentication
+
     if (email && password) {
       router.push("/qr"); // Route to qr.tsx
     } else {
@@ -17,7 +17,7 @@ export default function LoginScreen() {
   };
 
   const handleRegister = () => {
-    router.push("/register"); // Route to the register page (you need to create this page)
+    router.push("/register"); // Route to the register page
   };
 
   return (
@@ -41,10 +41,8 @@ export default function LoginScreen() {
         secureTextEntry
       />
 
-      {/* Login Button */}
       <Button title="Login" onPress={handleLogin} />
 
-      {/* Register Button */}
       <View style={styles.registerContainer}>
         <Text>Don't have an account?</Text>
         <Button title="Register" onPress={handleRegister} />
@@ -59,7 +57,7 @@ const styles = StyleSheet.create({
     justifyContent: "center", 
     alignItems: "center", 
     padding: 20,
-    backgroundColor: "#99CCFF", // Light Blue Background
+    backgroundColor: "#99CCFF",
   },
   title: { fontSize: 24, marginBottom: 20 },
   input: { 
@@ -68,7 +66,7 @@ const styles = StyleSheet.create({
     borderWidth: 1, 
     borderRadius: 5, 
     marginBottom: 20, 
-    backgroundColor: "#fff" // White background for input fields
+    backgroundColor: "#fff"
   },
   registerContainer: {
     marginTop: 20,
