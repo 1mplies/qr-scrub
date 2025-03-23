@@ -2,22 +2,33 @@ import { useState } from "react";
 import { View, TextInput, Button, StyleSheet, Text } from "react-native";
 import { useRouter } from "expo-router";
 
+const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
 export default function LoginScreen() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
   const router = useRouter();
 
   const handleLogin = () => {
-
-    if (email && password) {
-      router.push("/qr"); // Route to qr.tsx
-    } else {
-      alert("Please enter valid credentials.");
+    // Validate email format
+    if (!email || !emailRegex.test(email)) {
+      setError("Please enter a valid email address.");
+      return;
     }
+
+    // Ensure password is not empty
+    if (!password) {
+      setError("Please enter your password.");
+      return;
+    }
+
+    setError("");
+    router.push("/qr");
   };
 
   const handleRegister = () => {
-    router.push("/register"); // Route to the register page
+    router.push("/register");
   };
 
   return (
@@ -41,8 +52,13 @@ export default function LoginScreen() {
         secureTextEntry
       />
 
+      {/* Error Message */}
+      {error && <Text style={styles.error}>{error}</Text>}
+
+      {/* Login Button */}
       <Button title="Login" onPress={handleLogin} />
 
+      {/* Register Redirect */}
       <View style={styles.registerContainer}>
         <Text>Don't have an account?</Text>
         <Button title="Register" onPress={handleRegister} />
@@ -66,7 +82,12 @@ const styles = StyleSheet.create({
     borderWidth: 1, 
     borderRadius: 5, 
     marginBottom: 20, 
-    backgroundColor: "#fff"
+    backgroundColor: "#fff",
+  },
+  error: {
+    color: "red",
+    marginBottom: 20,
+    fontSize: 14,
   },
   registerContainer: {
     marginTop: 20,
