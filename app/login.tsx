@@ -16,6 +16,10 @@ export default function LoginScreen() {
     }
   };
 
+  const handleRegister = () => {
+    router.push("/register"); // Route to the register page (you need to create this page)
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Login</Text>
@@ -37,7 +41,14 @@ export default function LoginScreen() {
         secureTextEntry
       />
 
+      {/* Login Button */}
       <Button title="Login" onPress={handleLogin} />
+
+      {/* Register Button */}
+      <View style={styles.registerContainer}>
+        <Text>Don't have an account?</Text>
+        <Button title="Register" onPress={handleRegister} />
+      </View>
     </View>
   );
 }
@@ -58,5 +69,10 @@ const styles = StyleSheet.create({
     borderRadius: 5, 
     marginBottom: 20, 
     backgroundColor: "#fff" // White background for input fields
+  },
+  registerContainer: {
+    marginTop: 20,
+    flexDirection: "row",
+    alignItems: "center",
   },
 });
