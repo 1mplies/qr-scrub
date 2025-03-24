@@ -1,4 +1,9 @@
+<<<<<<< HEAD
+import { useState } from "react";
+import { View, TextInput, Button, StyleSheet, Text } from "react-native";
+=======
 import { View, Text, Button, Image, StyleSheet, TouchableOpacity } from "react-native";
+>>>>>>> add7a5253277ba5d48fa99ba4d697d7c227bd283
 import { useRouter } from "expo-router";
 
 export default function Index() {
