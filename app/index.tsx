@@ -1,40 +1,71 @@
+<<<<<<< HEAD
 import { useState } from "react";
 import { View, TextInput, Button, StyleSheet, Text } from "react-native";
+=======
+import { View, Text, Button, Image, StyleSheet, TouchableOpacity } from "react-native";
+>>>>>>> add7a5253277ba5d48fa99ba4d697d7c227bd283
 import { useRouter } from "expo-router";
 
-export default function LoginScreen() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+export default function Index() {
   const router = useRouter();
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Login</Text>
+      {/* Hospital Logo */}
+      <Image source={require("../assets/images/hospital_logo.png")} style={styles.logo} />
 
-      <TextInput
-        style={styles.input}
-        placeholder="Email"
-        value={email}
-        onChangeText={setEmail}
-        keyboardType="email-address"
-        autoCapitalize="none"
-      />
+      {/* App Title */}
+      <Text style={styles.title}>Hospital Scrub Borrowing System</Text>
 
-      <TextInput
-        style={styles.input}
-        placeholder="Password"
-        value={password}
-        onChangeText={setPassword}
-        secureTextEntry
-      />
+      {/* App Description */}
+      <Text style={styles.description}>
+        Welcome to our hospital's scrub borrowing system! Easily borrow and return scrubs with 
+        just a few taps. Log in to get started.
+      </Text>
 
-      <Button title="Login" onPress={() => router.push("/qr")} />
+      <TouchableOpacity style={styles.loginButton} onPress={() => router.push("/login")}>
+        <Text style={styles.loginButtonText}>Go to Login</Text>
+      </TouchableOpacity>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, justifyContent: "center", alignItems: "center", padding: 20 },
-  title: { fontSize: 24, marginBottom: 20 },
-  input: { width: "100%", padding: 10, borderWidth: 1, borderRadius: 5, marginBottom: 20 },
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 20,
+    backgroundColor: "#E3F2FD",
+  },
+  logo: {
+    width: 150,
+    height: 150,
+    marginBottom: 10,
+    marginTop: -40,
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: "bold",
+    marginBottom: 10,
+    color: "#1565C0",
+  },
+  description: {
+    fontSize: 16,
+    textAlign: "center",
+    marginBottom: 20,
+    color: "#333",
+  },
+  loginButton: {
+    backgroundColor: "#1565C0",
+    paddingVertical: 15,
+    paddingHorizontal: 50,
+    borderRadius: 10,
+    marginTop: 10,
+  },
+  loginButtonText: {
+    fontSize: 18,
+    color: "#fff",
+    fontWeight: "bold",
+  },
 });
