@@ -1,5 +1,6 @@
 const express = require("express");
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 const { Pool } = require("pg");
 require("dotenv").config();
 
@@ -18,9 +19,10 @@ router.get("/test", (req, res) => {
 });
 
 
-// Register new user with password hashing
+// Register new user with JWT token
 router.post("/register", async (req, res) => {
   const { username, email, password } = req.body;
+
 
   // Check if user already exists
   const userExists = await pool.query("SELECT * FROM users WHERE email = $1", [email]);
@@ -39,7 +41,16 @@ router.post("/register", async (req, res) => {
     [username, email, password]
   );
 
-  res.status(201).json({ message: "User registered successfully", user: newUser.rows[0] });
+   // Generate JWT token
+   const token = jwt.sign({ userId: newUser.rows[0].id }, process.env.JWT_SECRET, {
+    expiresIn: "1h",
+  });
+
+  res.status(201).json({
+    message: "User registered successfully",
+    user: newUser.rows[0],
+    token: token,
+  });
 });
 
 
