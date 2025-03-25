@@ -16,4 +16,25 @@ router.get("/test", (req, res) => {
   res.send("Auth route is working!");
 });
 
+
+// Register new user
+router.post("/register", async (req, res) => {
+  const { username, email, password } = req.body;
+
+  // Check if user already exists
+  const userExists = await pool.query("SELECT * FROM users WHERE email = $1", [email]);
+  if (userExists.rows.length > 0) {
+    return res.status(400).json({ message: "User already exists" });
+  }
+
+  // Insert new user
+  const newUser = await pool.query(
+    "INSERT INTO users (username, email, password) VALUES ($1, $2, $3) RETURNING *",
+    [username, email, password]
+  );
+
+  res.status(201).json({ message: "User registered successfully", user: newUser.rows[0] });
+});
+
+
 module.exports = router;
