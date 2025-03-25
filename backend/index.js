@@ -1,6 +1,6 @@
+const dotenv = require("dotenv");
 const express = require("express");
 const { Client } = require("pg");
-const dotenv = require("dotenv");
 
 dotenv.config(); // Load environment variables
 
