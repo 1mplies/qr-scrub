@@ -1,4 +1,5 @@
 const express = require("express");
+const bcrypt = require("bcryptjs");
 const { Pool } = require("pg");
 require("dotenv").config();
 
@@ -17,7 +18,7 @@ router.get("/test", (req, res) => {
 });
 
 
-// Register new user
+// Register new user with password hashing
 router.post("/register", async (req, res) => {
   const { username, email, password } = req.body;
 
@@ -26,6 +27,11 @@ router.post("/register", async (req, res) => {
   if (userExists.rows.length > 0) {
     return res.status(400).json({ message: "User already exists" });
   }
+
+   // Hash the password
+   const salt = await bcrypt.genSalt(10);
+   const hashedPassword = await bcrypt.hash(password, salt);
+ 
 
   // Insert new user
   const newUser = await pool.query(
