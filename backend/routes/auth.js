@@ -18,7 +18,13 @@ const authenticateToken = (req, res, next) => {
   const token = req.header("Authorization");
   if (!token) return res.status(401).json({ message: "Access Denied" });
 
-  jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+  if (!token.startsWith("Bearer ")) {
+    return res.status(400).json({ message: "Token format is incorrect" });
+  }
+
+  const tokenWithoutBearer = token.split(" ")[1];
+
+  jwt.verify(tokenWithoutBearer, process.env.JWT_SECRET, (err, user) => {
     if (err) return res.status(403).json({ message: "Invalid Token" });
     req.user = user;
     next();
@@ -31,7 +37,7 @@ router.post("/register", async (req, res) => {
     const { username, email, password } = req.body;
 
     // Check if user already exists
-    const userExists = await pool.query("SELECT * FROM users WHERE email = $1", [email]);
+    const userExists = await pool.query("SELECT id FROM users WHERE email = $1", [email]);
     if (userExists.rows.length > 0) {
       return res.status(400).json({ message: "User already exists" });
     }
@@ -48,7 +54,7 @@ router.post("/register", async (req, res) => {
 
     res.status(201).json({ message: "User registered successfully", user: newUser.rows[0] });
   } catch (err) {
-    console.error(err.message);
+    console.error("Error during registration: ", err.message);
     res.status(500).json({ message: "Server error" });
   }
 });
@@ -59,7 +65,7 @@ router.post("/login", async (req, res) => {
     const { email, password } = req.body;
 
     // Check if user exists
-    const user = await pool.query("SELECT * FROM users WHERE email = $1", [email]);
+    const user = await pool.query("SELECT id, username, email, password FROM users WHERE email = $1", [email]);
     if (user.rows.length === 0) {
       return res.status(400).json({ message: "Invalid email or password" });
     }
@@ -79,7 +85,7 @@ router.post("/login", async (req, res) => {
 
     res.json({ message: "Login successful", token });
   } catch (err) {
-    console.error(err.message);
+    console.error("Error during login: ", err.message);
     res.status(500).json({ message: "Server error" });
   }
 });
@@ -93,7 +99,7 @@ router.get("/profile", authenticateToken, async (req, res) => {
     }
     res.json(user.rows[0]);
   } catch (err) {
-    console.error(err.message);
+    console.error("Error fetching user profile: ", err.message);
     res.status(500).json({ message: "Server error" });
   }
 });
