@@ -1,5 +1,6 @@
 require("dotenv").config();
 const express = require("express");
+const authRoutes = require("./routes/auth"); // Import auth routes
 const { Pool } = require("pg");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
@@ -17,6 +18,7 @@ const pool = new Pool({
 });
 
 app.use(express.json()); // Middleware to parse JSON
+app.use("/auth", authRoutes); // Use authentication routes
 
 // Test route
 app.get("/", (req, res) => {
