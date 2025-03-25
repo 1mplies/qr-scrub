@@ -1,6 +1,8 @@
 require("dotenv").config();
 const express = require("express");
-const authRoutes = require("./routes/auth");
+const bodyParser = require("body-parser");
+const cors = require("cors");
+const authRoutes = require("./routes/auth");  // Import authentication routes
 const { Pool } = require("pg");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
@@ -17,15 +19,34 @@ const pool = new Pool({
   port: process.env.DB_PORT,
 });
 
-app.use(express.json()); // Middleware to parse JSON
-app.use("/auth", authRoutes); // Use authentication routes
+// Test connection to the database
+pool.query('SELECT NOW()', (err, res) => {
+  if (err) {
+    console.log('Error connecting to database:', err);
+  } else {
+    console.log('Connected to database:', res.rows[0]);
+  }
+});
 
-// Register Endpoint
+
+// Middleware
+app.use(cors());
+app.use(bodyParser.json());  // Middleware to parse JSON request bodies
+
+// Routes
+app.use("/api/auth", authRoutes);  // Authentication routes (from `authRoutes`)
+
+// Test route to verify server is running
+app.get("/", (req, res) => {
+  res.send("Welcome to the Auth API!");
+});
+
+// Register Endpoint (used for demo purposes, you can remove if needed)
 app.post('/api/auth/register', async (req, res) => {
-  const { email, password } = req.body;
+  const { email, password, username } = req.body;
 
-  if (!email || !password) {
-    return res.status(400).json({ message: "Email and password are required." });
+  if (!email || !password || !username) {
+    return res.status(400).json({ message: "Email, username, and password are required." });
   }
 
   try {
@@ -34,16 +55,18 @@ app.post('/api/auth/register', async (req, res) => {
 
     // Insert user into the database
     const result = await pool.query(
-      'INSERT INTO users (email, password) VALUES ($1, $2) RETURNING id, email',
-      [email, hashedPassword]
+      'INSERT INTO users (username, email, password) VALUES ($1, $2, $3) RETURNING id, username, email',
+      [username, email, hashedPassword]
     );
 
+    console.log('Inserted User:', result.rows[0]); // Log the inserted user for debugging
     res.status(201).json({ message: "Registration successful!", user: result.rows[0] });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Server error." });
   }
 });
+
 
 // Login Endpoint
 app.post('/api/auth/login', async (req, res) => {
@@ -84,11 +107,7 @@ app.post('/api/auth/login', async (req, res) => {
   }
 });
 
-// Test route
-app.get("/", (req, res) => {
-  res.send("Welcome to the Auth API!");
-});
-
+// Start server
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
 });
