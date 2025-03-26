@@ -24,6 +24,11 @@ const authenticateToken = (req, res, next) => {
   });
 };
 
+  //protected route for qr page
+router.get("/qr", authenticateToken, (req, res) => {
+  res.json({ qrCodeData: "This is the QR Code data for the authenticated user." });
+});
+
 // Register new user
 router.post("/register", async (req, res) => {
   try {
