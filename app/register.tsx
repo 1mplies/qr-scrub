@@ -11,8 +11,8 @@ export default function RegisterScreen() {
   const [error, setError] = useState("");
   const router = useRouter();
 
-  const handleRegister = () => {
-
+  const handleRegister = async () => {
+    // Check if email is valid
     if (!email || !emailRegex.test(email)) {
       setError("Please enter a valid email address.");
       return;
@@ -30,9 +30,31 @@ export default function RegisterScreen() {
       return;
     }
 
-    setError("");
-    alert("Registration successful!"); 
-    router.push("/login"); // Navigate to the login page
+    try {
+      const response = await fetch("http://localhost:5000/api/auth/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email,
+          password,
+          username: email.split("@")[0], // username from email for now
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        setError(data.message || "Registration failed.");
+        return;
+      }
+
+      setError("");
+      alert("Registration successful!");
+      router.push("/login"); // Navigate to the login page
+    } catch (err) {
+      console.error(err);
+      setError("Failed to connect to the server.");
+    }
   };
 
   return (
