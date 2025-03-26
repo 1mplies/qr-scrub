@@ -36,6 +36,15 @@ export default function QRScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, justifyContent: "center", alignItems: "center" },
-  title: { fontSize: 24, marginBottom: 20 },
+  container: { 
+    flex: 1, 
+    justifyContent: "center", 
+    alignItems: "center", 
+    padding: 20,
+    backgroundColor: "#99CCFF",
+  },
+  title: { 
+    fontSize: 24, 
+    marginBottom: 20,
+  },
 });
