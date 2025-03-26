@@ -13,48 +13,38 @@ export default function LoginScreen() {
   const router = useRouter();
 
   const handleLogin = async () => {
-    // Validate email format
     if (!email || !emailRegex.test(email)) {
       setError("Please enter a valid email address.");
       return;
     }
-
-    // Ensure password is not empty
+  
     if (!password) {
       setError("Please enter your password.");
       return;
     }
-
+  
     setError("");
-    router.push("/qr");
-
+  
     try {
-        // Sending POST request to backend API
-        const response = await fetch("http://localhost:5000/api/auth/login", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ email, password }),
-        });
-    
-        const data = await response.json(); // Parse the response body into JSON
-    
-        if (response.ok) {
-          // If login is successful, store the authentication token in AsyncStorage
-          await AsyncStorage.setItem("authToken", data.token);
-    
-          // Navigate to another screen after successful login
-          router.push("/qr"); // Navigate to your QR screen (or the desired route)
-        } else {
-          // Show error message if login fails
-          setError(data.message || "Login failed. Please try again.");
-        }
-      } catch (error) {
-        // Handle network errors or any other issues
-        setError("An error occurred. Please try again.");
+      const response = await fetch("http://localhost:5000/api/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
+  
+      const data = await response.json();
+  
+      if (response.ok) {
+        await AsyncStorage.setItem("authToken", data.token);
+        router.push("/qr");
+      } else {
+        setError(data.message || "Login failed. Please try again.");
       }
-    
+    } catch (error) {
+      setError("An error occurred. Please try again.");
+    }
   };
 
   const handleRegister = () => {
