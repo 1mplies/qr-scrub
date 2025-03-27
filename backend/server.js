@@ -6,6 +6,7 @@ const authRoutes = require("./routes/auth");  // Import authentication routes
 const { Pool } = require("pg");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const { v4: uuidv4 } = require('uuid');
 
 const app = express();
 const port = process.env.PORT || 5000;
@@ -52,11 +53,14 @@ app.post('/api/auth/register', async (req, res) => {
   try {
     // Hash the password before saving it to the database
     const hashedPassword = await bcrypt.hash(password, 10);
+    
+    const userUUID = uuidv4();  // generate UUID for the user
+    console.log("Generated UUID:", userUUID);  // log uuid
 
-    // Insert user into the database
+    // Insert user & uuid into the database
     const result = await pool.query(
-      'INSERT INTO users (username, email, password) VALUES ($1, $2, $3) RETURNING id, username, email',
-      [username, email, hashedPassword]
+      'INSERT INTO users (username, email, password, uuid) VALUES ($1, $2, $3, $4::uuid) RETURNING id, username, email, uuid',
+      [username, email, hashedPassword, userUUID]
     );
 
     console.log('Inserted User:', result.rows[0]); // Log the inserted user for debugging

@@ -1,8 +1,10 @@
 const express = require("express");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const pool = require("../config/db");  // Import pool from db.js
+const pool = require("../config/db");
 require("dotenv").config();
+const { v4: uuidv4 } = require('uuid');
+
 
 const router = express.Router();
 
@@ -44,10 +46,13 @@ router.post("/register", async (req, res) => {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
-    // Insert new user
-    const newUser = await pool.query(
-      "INSERT INTO users (username, email, password) VALUES ($1, $2, $3) RETURNING id, username, email",
-      [username, email, hashedPassword]
+    //generate UUID
+    const userUUID = uuidv4();
+
+    // Insert user & uuid into the database
+    const result = await pool.query(
+      'INSERT INTO users (username, email, password, uuid) VALUES ($1, $2, $3, $4) RETURNING id, username, email, uuid',
+      [username, email, hashedPassword, userUUID]
     );
 
     res.status(201).json({ message: "User registered successfully", user: newUser.rows[0] });

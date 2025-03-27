@@ -12,16 +12,16 @@ export default function Index() {
       <Image source={require("../assets/images/hospital_logo.png")} style={styles.logo} />
 
       {/* App Title */}
-      <Text style={styles.title}>Hospital Scrub Borrowing System</Text>
+      <Text style={styles.title}>QR-scrub</Text>
 
       {/* App Description */}
       <Text style={styles.description}>
-        Welcome to our hospital's scrub borrowing system! Easily borrow and return scrubs with 
-        just a few taps. Log in to get started.
+        Welcome to our hospitals scrub checkout system! Please log in to borrow
+        and return scrubs in just a swipe!
       </Text>
 
       <TouchableOpacity style={styles.loginButton} onPress={() => router.push("/login")}>
-        <Text style={styles.loginButtonText}>Go to Login</Text>
+        <Text style={styles.loginButtonText}>Login/Register</Text>
       </TouchableOpacity>
     </View>
   );
