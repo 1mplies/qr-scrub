@@ -8,11 +8,18 @@ export default function RegisterScreen() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [fullName, setFullName] = useState("");
   const [error, setError] = useState("");
   const router = useRouter();
 
   const handleRegister = async () => {
-    // Check if email is valid
+    // email and name validation
+
+    if (!fullName) {
+      setError("Please enter a full name.")
+      return;
+    }
+
     if (!email || !emailRegex.test(email)) {
       setError("Please enter a valid email address.");
       return;
@@ -36,6 +43,7 @@ export default function RegisterScreen() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           email,
+          fullName,
           password,
           username: email.split("@")[0], // username from email for now
         }),
@@ -60,6 +68,13 @@ export default function RegisterScreen() {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Register</Text>
+
+      <TextInput
+        style={styles.input}
+        placeholder="Full Name"
+        value={fullName}
+        onChangeText={setFullName}
+      />
 
       <TextInput
         style={styles.input}

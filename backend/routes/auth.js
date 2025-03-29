@@ -34,7 +34,7 @@ router.get("/qr", authenticateToken, (req, res) => {
 // Register new user
 router.post("/register", async (req, res) => {
   try {
-    const { username, email, password } = req.body;
+    const { email, password, username, fullName } = req.body;
 
     // Check if user already exists
     const userExists = await pool.query("SELECT id FROM users WHERE email = $1", [email]);
@@ -51,8 +51,8 @@ router.post("/register", async (req, res) => {
 
     // Insert user & uuid into the database
     const result = await pool.query(
-      'INSERT INTO users (username, email, password, uuid) VALUES ($1, $2, $3, $4) RETURNING id, username, email, uuid',
-      [username, email, hashedPassword, userUUID]
+      'INSERT INTO users (username, email, password, uuid, full_name) VALUES ($1, $2, $3, $4, $5) RETURNING id, username, email, uuid, full_name',
+      [username, email, hashedPassword, userUUID, fullName]
     );
 
     res.status(201).json({ message: "User registered successfully", user: newUser.rows[0] });

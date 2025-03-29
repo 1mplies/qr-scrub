@@ -16,7 +16,7 @@ export default function Index() {
 
       {/* App Description */}
       <Text style={styles.description}>
-        Welcome to our hospitals scrub checkout system! Please log in to borrow
+        Welcome to our scrub checkout system! Please log in to borrow
         and return scrubs in just a swipe!
       </Text>
 
