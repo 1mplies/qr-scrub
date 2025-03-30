@@ -26,9 +26,22 @@ const authenticateToken = (req, res, next) => {
   });
 };
 
-  //protected route for qr page
-router.get("/qr", authenticateToken, (req, res) => {
-  res.json({ qrCodeData: "This is the QR Code data for the authenticated user." });
+// protected route for qr page
+router.get("/qr", authenticateToken, async (req, res) => {
+  try {
+    // fetch the authenticated user's data
+    const user = await pool.query("SELECT full_name FROM users WHERE id = $1", [req.user.id]);
+    
+    if (user.rows.length === 0) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // respond with the user's full_name
+    res.json({ fullName: user.rows[0].full_name });
+  } catch (err) {
+    console.error("Error fetching user data:", err.message);
+    res.status(500).json({ message: "Server error" });
+  }
 });
 
 // Register new user
