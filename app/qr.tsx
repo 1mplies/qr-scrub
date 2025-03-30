@@ -7,18 +7,19 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 export default function QRScreen() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [fullName, setFullName] = useState("");
+  const [uuid, setUuid] = useState("");
   const router = useRouter();
 
   useEffect(() => {
     const checkAuthentication = async () => {
       const token = await AsyncStorage.getItem("authToken");
       if (!token) {
-        // Redirect to login if no token
+        // redirect to login on no valid token
         router.push("/login");
       } else {
         setIsAuthenticated(true);
         
-        // Fetch user data after authentication
+        // fetch user data
         try {
           const response = await fetch("http://localhost:5000/api/auth/qr", {
             method: "GET",
@@ -29,7 +30,8 @@ export default function QRScreen() {
 
           const data = await response.json();
           if (response.ok) {
-            setFullName(data.fullName); // Set full name from response
+            setFullName(data.fullName);
+            setUuid(data.uuid);
           } else {
             console.error("Failed to fetch user data:", data.message);
           }
@@ -61,7 +63,9 @@ export default function QRScreen() {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>{fullName || "Loading..."}</Text>
-      <QRCode value="Placeholder QR Code" size={200} />
+      
+      {/* only render if uuid available */}
+      {uuid && <QRCode value={uuid} size={200} />}
       
       {/* Logout Button */}
       <View style={styles.logoutButtonContainer}>

@@ -30,14 +30,14 @@ const authenticateToken = (req, res, next) => {
 router.get("/qr", authenticateToken, async (req, res) => {
   try {
     // fetch the authenticated user's data
-    const user = await pool.query("SELECT full_name FROM users WHERE id = $1", [req.user.id]);
+    const user = await pool.query("SELECT full_name, uuid FROM users WHERE id = $1", [req.user.id]);
     
     if (user.rows.length === 0) {
       return res.status(404).json({ message: "User not found" });
     }
 
-    // respond with the user's full_name
-    res.json({ fullName: user.rows[0].full_name });
+    // respond with the user's full_name and uuid
+    res.json({ fullName: user.rows[0].full_name, uuid: user.rows[0].uuid });
   } catch (err) {
     console.error("Error fetching user data:", err.message);
     res.status(500).json({ message: "Server error" });
