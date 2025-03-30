@@ -31,6 +31,7 @@ CREATE TABLE public.users (
     email character varying(255) NOT NULL,
     password character varying(255) NOT NULL,
     uuid uuid
+    full_name character varying(255) NOT NULL,
 );
 
 
