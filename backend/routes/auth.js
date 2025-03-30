@@ -55,7 +55,7 @@ router.post("/register", async (req, res) => {
       [username, email, hashedPassword, userUUID, fullName]
     );
 
-    res.status(201).json({ message: "User registered successfully", user: newUser.rows[0] });
+    res.status(201).json({ message: "User registered successfully", user: result.rows[0] });
   } catch (err) {
     console.error("Error during registration: ", err.message);
     res.status(500).json({ message: "Server error" });
