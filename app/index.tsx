@@ -12,16 +12,18 @@ export default function Index() {
       <Image source={require("../assets/images/hospital_logo.png")} style={styles.logo} />
 
       {/* App Title */}
-      <Text style={styles.title}>QR-scrub</Text>
+      <Text style={styles.title}>QR-Scrub</Text>
 
       {/* App Description */}
       <Text style={styles.description}>
-        Welcome to our scrub checkout system! Please log in to borrow
-        and return scrubs in just a swipe!
+        Welcome to our scrub checkout system!
+      </Text>
+      <Text style={styles.description}>
+        Please log in to borrow and return scrubs in just a swipe!
       </Text>
 
       <TouchableOpacity style={styles.loginButton} onPress={() => router.push("/login")}>
-        <Text style={styles.loginButtonText}>Login/Register</Text>
+        <Text style={styles.loginButtonText}>Log in or Register</Text>
       </TouchableOpacity>
     </View>
   );
@@ -36,10 +38,12 @@ const styles = StyleSheet.create({
     backgroundColor: "#E3F2FD",
   },
   logo: {
-    width: 150,
-    height: 150,
+    width: 200, 
+    height: 200, 
     marginBottom: 10,
     marginTop: -40,
+    borderRadius: 20, 
+    resizeMode: "contain", 
   },
   title: {
     fontSize: 24,
@@ -51,6 +55,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     textAlign: "center",
     marginBottom: 20,
+    fontFamily: 'Cochin',
     color: "#333",
   },
   loginButton: {

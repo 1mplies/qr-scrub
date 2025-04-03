@@ -106,7 +106,7 @@ export default function RegisterScreen() {
       <Button title="Register" onPress={handleRegister} />
 
       <View style={styles.loginContainer}>
-        <Text>Already have an account?</Text>
+        <Text>Already have an account?  </Text>
         <Button title="Login" onPress={() => router.push("/login")} />
       </View>
     </View>
@@ -121,9 +121,9 @@ const styles = StyleSheet.create({
     padding: 20,
     backgroundColor: "#99CCFF",
   },
-  title: { fontSize: 24, marginBottom: 20 },
+  title: { fontSize: 24, marginBottom: 20, fontWeight:"bold" },
   input: {
-    width: "100%",
+    width: "50%",
     padding: 10,
     borderWidth: 1,
     borderRadius: 5,
