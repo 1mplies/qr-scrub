@@ -22,7 +22,79 @@ SET default_tablespace = '';
 SET default_table_access_method = heap;
 
 --
--- Name: users; Type: TABLE; Schema: public; Owner: -
+-- Name: stock; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.stock (
+    id integer NOT NULL,
+    name character varying(255) NOT NULL,
+    size character varying(10) NOT NULL,
+    quantity integer NOT NULL
+);
+
+
+ALTER TABLE public.stock OWNER TO postgres;
+
+--
+-- Name: total_inventory_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.total_inventory_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.total_inventory_id_seq OWNER TO postgres;
+
+--
+-- Name: total_inventory_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.total_inventory_id_seq OWNED BY public.stock.id;
+
+
+--
+-- Name: user_inventory; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.user_inventory (
+    id integer NOT NULL,
+    user_id integer NOT NULL,
+    item_id integer NOT NULL,
+    quantity integer NOT NULL
+);
+
+
+ALTER TABLE public.user_inventory OWNER TO postgres;
+
+--
+-- Name: user_inventory_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.user_inventory_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.user_inventory_id_seq OWNER TO postgres;
+
+--
+-- Name: user_inventory_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.user_inventory_id_seq OWNED BY public.user_inventory.id;
+
+
+--
+-- Name: users; Type: TABLE; Schema: public; Owner: postgres
 --
 
 CREATE TABLE public.users (
@@ -35,8 +107,10 @@ CREATE TABLE public.users (
 );
 
 
+ALTER TABLE public.users OWNER TO postgres;
+
 --
--- Name: users_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+-- Name: users_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
 CREATE SEQUENCE public.users_id_seq
@@ -48,22 +122,46 @@ CREATE SEQUENCE public.users_id_seq
     CACHE 1;
 
 
+ALTER SEQUENCE public.users_id_seq OWNER TO postgres;
+
 --
--- Name: users_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+-- Name: users_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
 ALTER SEQUENCE public.users_id_seq OWNED BY public.users.id;
 
 
 --
--- Name: users id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: stock id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.stock ALTER COLUMN id SET DEFAULT nextval('public.total_inventory_id_seq'::regclass);
+
+
+--
+-- Name: user_inventory id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.user_inventory ALTER COLUMN id SET DEFAULT nextval('public.user_inventory_id_seq'::regclass);
+
+
+--
+-- Name: users id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_id_seq'::regclass);
 
 
 --
--- Name: users unique_uuid; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: stock total_inventory_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.stock
+    ADD CONSTRAINT total_inventory_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: users unique_uuid; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.users
@@ -71,7 +169,23 @@ ALTER TABLE ONLY public.users
 
 
 --
--- Name: users users_email_key; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: user_inventory user_inventory_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.user_inventory
+    ADD CONSTRAINT user_inventory_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: user_inventory user_inventory_user_id_item_id_key; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.user_inventory
+    ADD CONSTRAINT user_inventory_user_id_item_id_key UNIQUE (user_id, item_id);
+
+
+--
+-- Name: users users_email_key; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.users
@@ -79,11 +193,27 @@ ALTER TABLE ONLY public.users
 
 
 --
--- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.users
     ADD CONSTRAINT users_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: user_inventory user_inventory_item_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.user_inventory
+    ADD CONSTRAINT user_inventory_item_id_fkey FOREIGN KEY (item_id) REFERENCES public.stock(id) ON DELETE CASCADE;
+
+
+--
+-- Name: user_inventory user_inventory_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.user_inventory
+    ADD CONSTRAINT user_inventory_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.users(id) ON DELETE CASCADE;
 
 
 --
