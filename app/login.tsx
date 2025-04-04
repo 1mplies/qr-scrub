@@ -88,30 +88,31 @@ export default function LoginScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { 
-    flex: 1, 
-    justifyContent: "center", 
-    alignItems: "center", 
-    padding: 20,
-    backgroundColor: "#99CCFF",
-  },
-  title: { fontSize: 24, marginBottom: 20 },
-  input: { 
-    width: "100%", 
-    padding: 10, 
-    borderWidth: 1, 
-    borderRadius: 5, 
-    marginBottom: 20, 
-    backgroundColor: "#fff",
-  },
-  error: {
-    color: "red",
-    marginBottom: 20,
-    fontSize: 14,
-  },
-  registerContainer: {
-    marginTop: 20,
-    flexDirection: "row",
+  container: {
+    flex: 1,
+    justifyContent: "center",
     alignItems: "center",
+    backgroundColor: "#99CCFF", // background color
+  },
+  title: {
+    fontSize: 30,
+    marginBottom: 20,
+    fontWeight: "bold",
+  },
+  buttonWrapper: {
+    width: 200,
+    marginTop: 15,
+  },
+  itemContainer: {
+    backgroundColor: "#0066CC", //item color
+    padding: 15,
+    borderRadius: 15,
+    marginVertical: 10,
+    width: "80%",
+    alignItems: "center",
+  },
+  itemText: {
+    fontSize: 18,
+    color: "#FFFFFF",
   },
 });
