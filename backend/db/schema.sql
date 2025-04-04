@@ -36,10 +36,10 @@ CREATE TABLE public.stock (
 ALTER TABLE public.stock OWNER TO postgres;
 
 --
--- Name: total_inventory_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: stock_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
-CREATE SEQUENCE public.total_inventory_id_seq
+CREATE SEQUENCE public.stock_id_seq
     AS integer
     START WITH 1
     INCREMENT BY 1
@@ -48,13 +48,13 @@ CREATE SEQUENCE public.total_inventory_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.total_inventory_id_seq OWNER TO postgres;
+ALTER SEQUENCE public.stock_id_seq OWNER TO postgres;
 
 --
--- Name: total_inventory_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+-- Name: stock_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
-ALTER SEQUENCE public.total_inventory_id_seq OWNED BY public.stock.id;
+ALTER SEQUENCE public.stock_id_seq OWNED BY public.stock.id;
 
 
 --
@@ -135,7 +135,7 @@ ALTER SEQUENCE public.users_id_seq OWNED BY public.users.id;
 -- Name: stock id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.stock ALTER COLUMN id SET DEFAULT nextval('public.total_inventory_id_seq'::regclass);
+ALTER TABLE ONLY public.stock ALTER COLUMN id SET DEFAULT nextval('public.stock_id_seq'::regclass);
 
 
 --
