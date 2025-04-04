@@ -6,9 +6,9 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 export default function InventoryScreen() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [inventoryItems, setInventoryItems] = useState([
-    { id: 1, name: "Scrub - Small", quantity: 5 },
-    { id: 2, name: "Scrub - Medium", quantity: 3 },
-    { id: 3, name: "Scrub - Large", quantity: 2 }
+    { id: 1, name: "Scrub - S", quantity: 5 },
+    { id: 2, name: "Scrub - M", quantity: 3 },
+    { id: 3, name: "Scrub - L", quantity: 2 }
   ]);
   const router = useRouter();
 
@@ -31,9 +31,9 @@ export default function InventoryScreen() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Inventory</Text>
+      <Text style={styles.title}>My Inventory</Text>
 
-      {/* Scrollable List of Items */}
+      {/* scroll view of items */}
       <ScrollView style={styles.scrollView}>
         {inventoryItems.map((item) => (
           <View key={item.id} style={styles.itemCard}>
@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   itemCard: {
-    backgroundColor: "#fff",
+    backgroundColor: "#b3d9ff", //item card color
     padding: 15,
     marginBottom: 10,
     borderRadius: 10,
