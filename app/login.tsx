@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { View, TextInput, Button, StyleSheet, Text } from "react-native";
 import { useRouter } from "expo-router";
-import AsyncStorage from "@react-native-async-storage/async-storage";  // Import AsyncStorage
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 
 const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -53,7 +53,7 @@ export default function LoginScreen() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Log In</Text>
+      <Text style={styles.title}>Login</Text>
 
       <TextInput
         style={styles.input}
@@ -80,7 +80,7 @@ export default function LoginScreen() {
 
       {/* Register Redirect */}
       <View style={styles.registerContainer}>
-        <Text>Don't have an account? Please register here!  </Text>
+        <Text>Don't have an account?</Text>
         <Button title="Register" onPress={handleRegister} />
       </View>
     </View>
@@ -95,9 +95,9 @@ const styles = StyleSheet.create({
     padding: 20,
     backgroundColor: "#99CCFF",
   },
-  title: { fontSize: 24, marginBottom: 20, fontWeight:"bold", },
+  title: { fontSize: 24, marginBottom: 20 },
   input: { 
-    width: "50%", 
+    width: "100%", 
     padding: 10, 
     borderWidth: 1, 
     borderRadius: 5, 
