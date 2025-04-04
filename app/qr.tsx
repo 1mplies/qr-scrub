@@ -49,6 +49,11 @@ export default function QRScreen() {
     return null;
   }
 
+
+  const handleViewInventory = () => {
+    router.push("/inventory");
+  };
+
   //logout
   const handleLogout = async () => {
     try {
@@ -60,6 +65,7 @@ export default function QRScreen() {
     }
   };
 
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>{fullName || "Loading..."}</Text>
@@ -67,8 +73,13 @@ export default function QRScreen() {
       {/* only render if uuid available */}
       {uuid && <QRCode value={uuid} size={200} />}
       
+          {/* View Inventory Button */}
+    <View style={styles.buttonWrapper}>
+      <Button title="View Inventory" onPress={handleViewInventory} />
+    </View>
+
       {/* Logout Button */}
-      <View style={styles.logoutButtonContainer}>
+      <View style={styles.buttonWrapper}>
         <Button title="Logout" onPress={handleLogout} />
       </View>
     </View>
@@ -84,11 +95,12 @@ const styles = StyleSheet.create({
     backgroundColor: "#99CCFF",
   },
   title: { 
-    fontSize: 24, 
+    fontSize: 30, 
     marginBottom: 20,
+    fontWeight: "bold",
   },
-  logoutButtonContainer: {
-    marginTop: 20,
-    padding: 10,
-  }
+  buttonWrapper: {
+    width: 200,
+    marginTop: 15,
+  },
 });
