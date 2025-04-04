@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, ScrollView } from "react-native";
+import React, { useState, useEffect, } from "react";
+import { View, Text, StyleSheet, ScrollView, Button,} from "react-native";
 import { useRouter } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -31,18 +31,28 @@ export default function InventoryScreen() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>My Inventory</Text>
+      <Text style={styles.title}>My Inventory:</Text>
 
       {/* scroll view of items */}
       <ScrollView style={styles.scrollView}>
         {inventoryItems.map((item) => (
           <View key={item.id} style={styles.itemCard}>
             <Text style={styles.itemText}>{item.name}</Text>
-            <Text style={styles.itemText}>Quantity: {item.quantity}</Text>
+            <Text style={styles.itemTextQty}>qty: {item.quantity}</Text>
           </View>
         ))}
       </ScrollView>
+
+      <Text style={styles.launderingMessage}>
+        Please return these items & scan your QR code at checkout!
+      </Text>
+      
+        <View style={{ marginTop: 10 }}>
+            <Button title="Return to QR" onPress={() => router.push("/qr")} />
+        </View>
+
     </View>
+    
   );
 }
 
@@ -63,7 +73,7 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   itemCard: {
-    backgroundColor: "#b3d9ff", //item card color
+    backgroundColor: "#5e91ff", //item card color
     padding: 15,
     marginBottom: 10,
     borderRadius: 10,
@@ -76,5 +86,18 @@ const styles = StyleSheet.create({
   itemText: {
     fontSize: 18,
     marginBottom: 5,
+    fontWeight: "bold",
+    color: "#fff"
+  },
+  itemTextQty: {
+    fontSize: 18,
+    marginBottom: 5,
+    color: "#252fc2",
+    fontWeight: "bold",
+  },
+  launderingMessage: {
+    fontSize: 18,
+    color: "#252fc2",
+    marginBottom: 20,
   },
 });
