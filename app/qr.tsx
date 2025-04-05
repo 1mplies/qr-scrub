@@ -21,7 +21,7 @@ export default function QRScreen() {
         
         // fetch user data
         try {
-          const response = await fetch("http://localhost:5000/api/auth/qr", {
+          const response = await fetch("http://localhost:5000/api/auth/qr", { 
             method: "GET",
             headers: {
               "Authorization": `Bearer ${token}`,

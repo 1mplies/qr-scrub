@@ -123,7 +123,7 @@ const styles = StyleSheet.create({
   },
   title: { fontSize: 24, marginBottom: 20, fontWeight:"bold" },
   input: {
-    width: "50%",
+    width: "70%",
     padding: 10,
     borderWidth: 1,
     borderRadius: 5,
