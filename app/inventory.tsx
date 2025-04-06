@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, ScrollView, Button, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from "react-native";
 import { useRouter } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import QRCode from "react-native-qrcode-svg"; // To generate QR code
+import QRCode from "react-native-qrcode-svg"; // For generating QR code
 
 // Define a type for inventory items
 interface InventoryItem {
@@ -14,7 +14,6 @@ interface InventoryItem {
 
 export default function InventoryScreen() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  // Explicitly define the type of inventoryItems as an array of InventoryItem
   const [inventoryItems, setInventoryItems] = useState<InventoryItem[]>([
     { id: 1, name: "Scrub - S", quantity: 5, uuid: "uuid-s" },
     { id: 2, name: "Scrub - M", quantity: 3, uuid: "uuid-m" },
@@ -45,73 +44,43 @@ export default function InventoryScreen() {
     setSelectedItem(item); // Set selected item for QR code generation
   };
 
-  // Handle QR code scanning (simulated on backend)
-  const handleItemReturn = async () => {
-    if (!selectedItem) {
-      return;
-    }
-
-    // Call backend API to remove the item from user's inventory
-    try {
-      const token = await AsyncStorage.getItem("authToken");
-      const response = await fetch(`http://localhost:5000/api/inventory/remove/${selectedItem.uuid}`, {
-        method: "POST",
-        headers: {
-          "Authorization": `Bearer ${token}`,
-          "Content-Type": "application/json"
-        }
-      });
-
-      if (response.ok) {
-        // Remove the item from local state upon successful removal
-        setInventoryItems(prevItems =>
-          prevItems.map(item =>
-            item.uuid === selectedItem.uuid
-              ? { ...item, quantity: item.quantity - 1 }
-              : item
-          )
-        );
-        setSelectedItem(null); // Clear the selected item
-      } else {
-        console.error("Failed to remove item:", response.statusText);
-      }
-    } catch (error) {
-      console.error("Error removing item:", error);
-    }
+  // Handle return to item list
+  const handleBackToInventory = () => {
+    setSelectedItem(null); // Clear selected item and go back to inventory list
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>My Inventory:</Text>
-
-      {/* Scroll view of items */}
-      <ScrollView style={styles.scrollView}>
-        {inventoryItems.map((item) => (
-          <TouchableOpacity key={item.id} onPress={() => handleItemSelect(item)}>
-            <View style={styles.itemCard}>
-              <Text style={styles.itemText}>{item.name}</Text>
-              <Text style={styles.itemTextQty}>qty: {item.quantity}</Text>
-            </View>
-          </TouchableOpacity>
-        ))}
-      </ScrollView>
-
-      {/* Display QR Code when an item is selected */}
-      {selectedItem && (
+      {/* If an item is selected, show QR code */}
+      {selectedItem ? (
         <View style={styles.qrContainer}>
           <Text style={styles.qrText}>Scan this QR code to return the item:</Text>
           <QRCode value={selectedItem.uuid} size={200} />
-          <Button title="Return Item" onPress={handleItemReturn} />
+          <Text style={styles.itemDetailsText}>Item: {selectedItem.name}</Text>
+          <Text style={styles.itemDetailsText}>Quantity: {selectedItem.quantity}</Text>
+          <TouchableOpacity onPress={handleBackToInventory} style={styles.returnButton}>
+            <Text style={styles.returnButtonText}>Back to Inventory</Text>
+          </TouchableOpacity>
+        </View>
+      ) : (
+        // If no item is selected, show the inventory list
+        <View style={styles.inventoryContainer}>
+          <Text style={styles.title}>My Inventory:</Text>
+
+          <ScrollView style={styles.scrollView}>
+            {inventoryItems.map((item) => (
+              <TouchableOpacity
+                key={item.id}
+                onPress={() => handleItemSelect(item)} // Handle item click
+                style={styles.itemCard}
+              >
+                <Text style={styles.itemText}>{item.name}</Text>
+                <Text style={styles.itemTextQty}>Quantity: {item.quantity}</Text>
+              </TouchableOpacity>
+            ))}
+          </ScrollView>
         </View>
       )}
-
-      <Text style={styles.launderingMessage}>
-        Please return these items & scan your QR code at checkout!
-      </Text>
-
-      <View style={{ marginTop: 10 }}>
-        <Button title="Return to QR" onPress={() => router.push("/qr")} />
-      </View>
     </View>
   );
 }
@@ -119,7 +88,7 @@ export default function InventoryScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
+    justifyContent: "flex-start",
     alignItems: "center",
     padding: 20,
     backgroundColor: "#99CCFF",
@@ -131,9 +100,14 @@ const styles = StyleSheet.create({
   },
   scrollView: {
     width: "100%",
+    marginBottom: 20,
+  },
+  inventoryContainer: {
+    flex: 1,
+    width: "100%",
   },
   itemCard: {
-    backgroundColor: "#5e91ff", // item card color
+    backgroundColor: "#5e91ff",
     padding: 15,
     marginBottom: 10,
     borderRadius: 10,
@@ -150,22 +124,35 @@ const styles = StyleSheet.create({
     color: "#fff",
   },
   itemTextQty: {
-    fontSize: 18,
+    fontSize: 16,
     marginBottom: 5,
-    color: "#252fc2",
-    fontWeight: "bold",
+    color: "#fff",
   },
   qrContainer: {
     marginTop: 20,
     alignItems: "center",
+    width: "100%",
+    paddingHorizontal: 20,
   },
   qrText: {
     fontSize: 18,
     marginBottom: 10,
   },
-  launderingMessage: {
-    fontSize: 18,
+  itemDetailsText: {
+    fontSize: 16,
     color: "#252fc2",
-    marginBottom: 20,
+    marginTop: 10,
+  },
+  returnButton: {
+    marginTop: 20,
+    backgroundColor: "#5e91ff",
+    paddingVertical: 12,
+    paddingHorizontal: 25,
+    borderRadius: 10,
+    alignItems: "center",
+  },
+  returnButtonText: {
+    color: "#fff",
+    fontSize: 18,
   },
 });
