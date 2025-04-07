@@ -107,7 +107,7 @@ export default function RegisterScreen() {
 
       <View style={styles.loginContainer}>
         <Text>Already have an account?  </Text>
-        <Button title="Login" onPress={() => router.push("/login")} />
+        <Button title="Log In" onPress={() => router.push("/login")} />
       </View>
     </View>
   );

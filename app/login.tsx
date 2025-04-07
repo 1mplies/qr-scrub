@@ -53,7 +53,7 @@ export default function LoginScreen() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Login</Text>
+      <Text style={styles.title}>Log In</Text>
 
       <TextInput
         style={styles.input}
@@ -76,11 +76,11 @@ export default function LoginScreen() {
       {error && <Text style={styles.error}>{error}</Text>}
 
       {/* Login Button */}
-      <Button title="Login" onPress={handleLogin} />
+      <Button title="Log In" onPress={handleLogin} />
 
       {/* Register Redirect */}
       <View style={styles.registerContainer}>
-        <Text>Don't have an account?</Text>
+        <Text>Don't have an account?  </Text>
         <Button title="Register" onPress={handleRegister} />
       </View>
     </View>
@@ -95,7 +95,7 @@ const styles = StyleSheet.create({
     padding: 20,
     backgroundColor: "#99CCFF",
   },
-  title: { fontSize: 24, marginBottom: 20 },
+  title: { fontSize: 24, marginBottom: 20, fontWeight:"bold" },
   input: { 
     width: "70%", 
     padding: 10, 
