@@ -3,7 +3,6 @@ import { View, TextInput, Button, StyleSheet, Text } from "react-native";
 import { useRouter } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-
 const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
 export default function LoginScreen() {
@@ -13,19 +12,21 @@ export default function LoginScreen() {
   const router = useRouter();
 
   const handleLogin = async () => {
+    // Validate email and password input
     if (!email || !emailRegex.test(email)) {
       setError("Please enter a valid email address.");
       return;
     }
-  
+
     if (!password) {
       setError("Please enter your password.");
       return;
     }
-  
-    setError("");
-  
+
+    setError(""); // Clear any previous errors
+
     try {
+      // Send POST request to login API
       const response = await fetch("http://localhost:5000/api/auth/login", {
         method: "POST",
         headers: {
@@ -33,21 +34,28 @@ export default function LoginScreen() {
         },
         body: JSON.stringify({ email, password }),
       });
-  
+
       const data = await response.json();
-  
+
       if (response.ok) {
+        // Save the authentication token and user role to AsyncStorage
         await AsyncStorage.setItem("authToken", data.token);
-        router.push("/qr");
+        await AsyncStorage.setItem("userRole", data.role);
+
+        // Navigate to the QR page after successful login
+        router.push("/qr"); 
       } else {
+        // Display error message if login fails
         setError(data.message || "Login failed. Please try again.");
       }
     } catch (error) {
+      // Handle any network or server errors
       setError("An error occurred. Please try again.");
     }
   };
 
   const handleRegister = () => {
+    // Navigate to the registration screen
     router.push("/register");
   };
 
@@ -72,13 +80,10 @@ export default function LoginScreen() {
         secureTextEntry
       />
 
-      {/* Error Message */}
       {error && <Text style={styles.error}>{error}</Text>}
 
-      {/* Login Button */}
       <Button title="Log In" onPress={handleLogin} />
 
-      {/* Register Redirect */}
       <View style={styles.registerContainer}>
         <Text>Don't have an account?  </Text>
         <Button title="Register" onPress={handleRegister} />
@@ -95,7 +100,12 @@ const styles = StyleSheet.create({
     padding: 20,
     backgroundColor: "#99CCFF",
   },
-  title: { fontSize: 24, marginBottom: 20, fontWeight:"bold", fontStyle: "italic", },
+  title: { 
+    fontSize: 24, 
+    marginBottom: 20, 
+    fontWeight: "bold", 
+    fontStyle: "italic", 
+  },
   input: { 
     width: "70%", 
     padding: 10, 

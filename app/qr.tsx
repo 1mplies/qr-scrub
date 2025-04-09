@@ -8,18 +8,17 @@ export default function QRScreen() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [fullName, setFullName] = useState("");
   const [uuid, setUuid] = useState("");
+  const [role, setRole] = useState("");  // Add role state to handle redirection
   const router = useRouter();
 
   useEffect(() => {
     const checkAuthentication = async () => {
       const token = await AsyncStorage.getItem("authToken");
       if (!token) {
-        // redirect to login on no valid token
         router.push("/login");
       } else {
         setIsAuthenticated(true);
-        
-        // fetch user data
+
         try {
           const response = await fetch("http://localhost:5000/api/auth/qr", { 
             method: "GET",
@@ -29,9 +28,18 @@ export default function QRScreen() {
           });
 
           const data = await response.json();
+          console.log("User data:", data);
+
           if (response.ok) {
             setFullName(data.fullName);
             setUuid(data.uuid);
+            setRole(data.role);  // Set the role value here
+
+            // Check the role and navigate if it's admin
+            if (data.role === 'admin') {
+              // Redirect to admin dashboard
+              router.push("/adminDashboard");
+            }
           } else {
             console.error("Failed to fetch user data:", data.message);
           }
@@ -43,43 +51,52 @@ export default function QRScreen() {
 
     checkAuthentication();
   }, []);
-  
 
   // Skip rendering QR and name if not authenticated
   if (!isAuthenticated) {
     return null;
   }
 
-
   const handleViewInventory = () => {
     router.push("/inventory");
   };
 
-  //logout
+  const handleAdminDashboard = () => {
+    if (role === "admin") {
+      router.push("/adminDashboard");  // Redirect to admin dashboard if the user is admin
+    }
+  };
+
+  // Logout
   const handleLogout = async () => {
     try {
       await AsyncStorage.removeItem("authToken");
-
       router.push("/login");
     } catch (error) {
       console.error("Error during logout:", error);
     }
   };
 
-
   return (
     <View style={styles.container}>
       <Text style={styles.title}>
         {fullName ? `Welcome, ${fullName}` : "Loading..."}
       </Text>
-      
-      {/* only render if uuid available */}
+
+      {/* Only render if uuid available */}
       {uuid && <QRCode value={uuid} size={300} />}
-      
-          {/* View Inventory Button */}
-    <View style={styles.buttonWrapper}>
-      <Button title="View Inventory" onPress={handleViewInventory} />
-    </View>
+
+      {/* View Inventory Button */}
+      <View style={styles.buttonWrapper}>
+        <Button title="View Inventory" onPress={handleViewInventory} />
+      </View>
+
+      {/* Admin Dashboard Button (only visible to admins) */}
+      {role === "admin" && (
+        <View style={styles.buttonWrapper}>
+          <Button title="Go to Admin Dashboard" onPress={handleAdminDashboard} />
+        </View>
+      )}
 
       {/* Logout Button */}
       <View style={styles.buttonWrapper}>

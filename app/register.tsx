@@ -10,13 +10,13 @@ export default function RegisterScreen() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [fullName, setFullName] = useState("");
   const [error, setError] = useState("");
+  const [role, setRole] = useState("user"); // Default role is "user"
   const router = useRouter();
 
   const handleRegister = async () => {
-    // email and name validation
-
+    // Validation for the fields
     if (!fullName) {
-      setError("Please enter a full name.")
+      setError("Please enter a full name.");
       return;
     }
 
@@ -25,17 +25,24 @@ export default function RegisterScreen() {
       return;
     }
 
-    // Check if password meets minimum length
     if (password.length < 6) {
       setError("Password must be at least 6 characters.");
       return;
     }
 
-    // Check if passwords match
     if (password !== confirmPassword) {
       setError("Passwords do not match.");
       return;
     }
+
+    // Ensure role is defined
+    if (!role) {
+      setError("Role is required.");
+      return;
+    }
+
+    // Log role to make sure it is being passed correctly
+    console.log("Selected Role: ", role);
 
     try {
       const response = await fetch("http://localhost:5000/api/auth/register", {
@@ -45,7 +52,8 @@ export default function RegisterScreen() {
           email,
           fullName,
           password,
-          username: email.split("@")[0], // username from email for now
+          username: email.split("@")[0], // Use the email prefix as the username
+          role, // Pass the selected role
         }),
       });
 
@@ -58,7 +66,7 @@ export default function RegisterScreen() {
 
       setError("");
       alert("Registration successful!");
-      router.push("/login"); // Navigate to the login page
+      router.push("/login"); // Redirect to login after successful registration
     } catch (err) {
       console.error(err);
       setError("Failed to connect to the server.");
@@ -101,6 +109,13 @@ export default function RegisterScreen() {
         secureTextEntry
       />
 
+      <View style={styles.roleSelection}>
+        <Text>Role:</Text>
+        <Button title="Set as Admin" onPress={() => setRole("admin")} />
+        <Button title="Set as User" onPress={() => setRole("user")} />
+        <Text>Selected Role: {role}</Text> {/* Show the selected role */}
+      </View>
+
       {error && <Text style={styles.error}>{error}</Text>}
 
       <Button title="Register" onPress={handleRegister} />
@@ -121,7 +136,12 @@ const styles = StyleSheet.create({
     padding: 20,
     backgroundColor: "#99CCFF",
   },
-  title: { fontSize: 24, marginBottom: 20, fontWeight:"bold", fontStyle: "italic", },
+  title: { 
+    fontSize: 24, 
+    marginBottom: 20, 
+    fontWeight: "bold", 
+    fontStyle: "italic" 
+  },
   input: {
     width: "70%",
     padding: 10,
@@ -134,6 +154,10 @@ const styles = StyleSheet.create({
     color: "red",
     marginBottom: 20,
     fontSize: 14,
+  },
+  roleSelection: {
+    marginTop: 10,
+    marginBottom: 20,
   },
   loginContainer: {
     marginTop: 20,
