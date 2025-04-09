@@ -43,6 +43,7 @@ export default function QRScreen() {
 
     checkAuthentication();
   }, []);
+  
 
   // Skip rendering QR and name if not authenticated
   if (!isAuthenticated) {
@@ -68,10 +69,12 @@ export default function QRScreen() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>{fullName || "Loading..."}</Text>
+      <Text style={styles.title}>
+        {fullName ? `Welcome, ${fullName}` : "Loading..."}
+      </Text>
       
       {/* only render if uuid available */}
-      {uuid && <QRCode value={uuid} size={200} />}
+      {uuid && <QRCode value={uuid} size={300} />}
       
           {/* View Inventory Button */}
     <View style={styles.buttonWrapper}>
@@ -80,7 +83,7 @@ export default function QRScreen() {
 
       {/* Logout Button */}
       <View style={styles.buttonWrapper}>
-        <Button title="Logout" onPress={handleLogout} />
+        <Button title="Log Out" onPress={handleLogout} />
       </View>
     </View>
   );
@@ -95,12 +98,15 @@ const styles = StyleSheet.create({
     backgroundColor: "#99CCFF",
   },
   title: { 
-    fontSize: 30, 
+    fontSize: 40, 
     marginBottom: 20,
     fontWeight: "bold",
+    fontStyle: "italic",
   },
   buttonWrapper: {
     width: 200,
     marginTop: 15,
+    borderRadius: 12, 
+    overflow: "hidden",
   },
 });
