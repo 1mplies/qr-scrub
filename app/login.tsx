@@ -53,7 +53,7 @@ export default function LoginScreen() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Log In</Text>
+      <Text style={styles.title}>Welcome, Please Log In!</Text>
 
       <TextInput
         style={styles.input}
@@ -95,7 +95,7 @@ const styles = StyleSheet.create({
     padding: 20,
     backgroundColor: "#99CCFF",
   },
-  title: { fontSize: 24, marginBottom: 20, fontWeight:"bold" },
+  title: { fontSize: 24, marginBottom: 20, fontWeight:"bold", fontStyle: "italic", },
   input: { 
     width: "70%", 
     padding: 10, 

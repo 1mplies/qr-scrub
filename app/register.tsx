@@ -67,7 +67,7 @@ export default function RegisterScreen() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Register</Text>
+      <Text style={styles.title}>Create your new account!</Text>
 
       <TextInput
         style={styles.input}
@@ -121,7 +121,7 @@ const styles = StyleSheet.create({
     padding: 20,
     backgroundColor: "#99CCFF",
   },
-  title: { fontSize: 24, marginBottom: 20, fontWeight:"bold" },
+  title: { fontSize: 24, marginBottom: 20, fontWeight:"bold", fontStyle: "italic", },
   input: {
     width: "70%",
     padding: 10,
