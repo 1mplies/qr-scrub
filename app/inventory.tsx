@@ -32,6 +32,7 @@ export default function InventoryScreen() {
 
     checkAuthentication();
   }, []);
+  
 
   const fetchInventoryData = async (token: string) => {
     try {
@@ -127,7 +128,7 @@ const styles = StyleSheet.create({
   },
   inventoryContainer: {
     flex: 1,
-    width: "100%",
+    width: "70%",
   },
   itemCard: {
     backgroundColor: "#5e91ff",
