@@ -106,7 +106,7 @@ router.post("/login", async (req, res) => {
   }
 });
 
-// Protected route
+// Protected route for profile; redundant?
 router.get("/profile", authenticateToken, async (req, res) => {
   try {
     const user = await pool.query("SELECT id, username, email FROM users WHERE id = $1", [req.user.id]);
@@ -116,6 +116,30 @@ router.get("/profile", authenticateToken, async (req, res) => {
     res.json(user.rows[0]);
   } catch (err) {
     console.error("Error fetching user profile: ", err.message);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+// fetch User Inventory
+router.get("/inventory", authenticateToken, async (req, res) => {
+  try {
+    // query users inventory data
+    const inventory = await pool.query(
+      `SELECT stock.name, stock.size, user_inventory.quantity 
+       FROM user_inventory 
+       JOIN stock ON user_inventory.item_id = stock.id 
+       WHERE user_inventory.user_id = $1`,
+      [req.user.id]
+    );
+
+    if (inventory.rows.length === 0) {
+      return res.status(404).json({ message: "No inventory found for this user." });
+    }
+
+    // Respond with the user's inventory data
+    res.json(inventory.rows);
+  } catch (err) {
+    console.error("Error fetching user inventory: ", err.message);
     res.status(500).json({ message: "Server error" });
   }
 });
