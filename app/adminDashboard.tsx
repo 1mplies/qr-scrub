@@ -58,7 +58,7 @@ export default function AdminDashboard() {
   }
 
   return (
-    <View style={styles.container}>
+    <View style={styles.container}>  {/* Ensure the background color is applied here */}
       <Text style={styles.title}>Admin Dashboard</Text>
       {isAdmin ? (
         <>
@@ -93,20 +93,35 @@ export default function AdminDashboard() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, justifyContent: "center", alignItems: "center", padding: 20 },
-  title: { fontSize: 24, fontWeight: "bold", marginBottom: 20 },
-  subtitle: { fontSize: 18, fontWeight: "bold", marginBottom: 20 },
+  container: { 
+    flex: 1, 
+    alignItems: "center",
+    padding: 20, 
+    backgroundColor: "#99CCFF",
+  },
+  title: { 
+    fontSize: 24, 
+    fontWeight: "bold", 
+    marginBottom: 20 
+  },
+  subtitle: { 
+    fontSize: 18, 
+    fontWeight: "bold", 
+    marginBottom: 10,
+    textAlign: 'center',
+  },
   tableContainer: {
-    width: "100%",
+    width: "80%", 
     marginTop: 20,
     borderRadius: 10,
     overflow: "hidden",
     borderWidth: 1,
-    borderColor: "#ddd",
+    borderColor: "#004c8c", 
+    backgroundColor: "#ffffff",
   },
   tableHeader: {
     flexDirection: "row",
-    backgroundColor: "#f2f2f2",
+    backgroundColor: "#004c8c", 
     padding: 10,
     borderBottomWidth: 1,
     borderBottomColor: "#ddd",
@@ -115,6 +130,7 @@ const styles = StyleSheet.create({
     flex: 1,
     fontWeight: "bold",
     textAlign: "center",
+    color: "#ffffff",
   },
   tableRow: {
     flexDirection: "row",
