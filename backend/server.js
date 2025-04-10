@@ -140,6 +140,58 @@ app.get('/api/stock', async (req, res) => {
   }
 });
 
+// Stock update route (add or subtract stock)
+app.patch('/api/stock/:id', async (req, res) => {
+  const { id } = req.params;
+  const { quantity, operation } = req.body;
+
+  console.log("Received update for item ID:", id);  // log the item ID being updated
+  console.log("Operation:", operation);  // log the operation (add or subtract)
+  console.log("Quantity:", quantity);  // log the quantity value
+
+  if (quantity <= 0 || !operation || !['add', 'subtract'].includes(operation)) {
+    return res.status(400).json({ message: "Invalid quantity or operation. Use 'add' or 'subtract'." });
+  }
+
+  try {
+    // fetch current stock for the item
+    const result = await pool.query('SELECT * FROM stock WHERE id = $1', [id]);
+
+    if (result.rows.length === 0) {
+      console.log("Item not found for ID:", id);  // log if item is not found
+      return res.status(404).json({ message: "Item not found." });
+    }
+
+    const currentItem = result.rows[0];
+    let newQuantity;
+
+    // calculate the new quantity
+    if (operation === 'add') {
+      newQuantity = currentItem.quantity + quantity;
+    } else if (operation === 'subtract') {
+      newQuantity = currentItem.quantity - quantity;
+
+      // check if new quantity is less than 0
+      if (newQuantity < 0) {
+        console.log("Cannot subtract more than available quantity. Current: ", currentItem.quantity, "Subtract: ", quantity);
+        return res.status(400).json({ message: "Cannot subtract more than the available quantity." });
+      }
+    }
+
+    console.log("New Quantity after update:", newQuantity);  // log the calculated new quantity
+
+    // Update the stock in the database
+    await pool.query('UPDATE stock SET quantity = $1 WHERE id = $2', [newQuantity, id]);
+
+    res.status(200).json({ message: "Stock updated successfully.", newQuantity });
+  } catch (error) {
+    console.error("Error updating stock:", error);
+    res.status(500).json({ message: "Failed to update stock." });
+  }
+});
+
+
+
 // Start server
 app.listen(port, '0.0.0.0', () => {
   console.log(`Server running on port ${port}`);
