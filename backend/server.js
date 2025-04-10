@@ -145,9 +145,7 @@ app.patch('/api/stock/:id', async (req, res) => {
   const { id } = req.params;
   const { quantity, operation } = req.body;
 
-  console.log("Received update for item ID:", id);  // log the item ID being updated
-  console.log("Operation:", operation);  // log the operation (add or subtract)
-  console.log("Quantity:", quantity);  // log the quantity value
+  console.log("Received request:", { quantity, operation });  // log the incoming request data
 
   if (quantity <= 0 || !operation || !['add', 'subtract'].includes(operation)) {
     return res.status(400).json({ message: "Invalid quantity or operation. Use 'add' or 'subtract'." });

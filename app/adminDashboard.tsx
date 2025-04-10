@@ -65,12 +65,11 @@ export default function AdminDashboard() {
       return;
     }
   
-    const change = operation === 'add' ? quantityNumber : -quantityNumber; 
-    console.log("Change:", change);
+    const change = quantityNumber;
   
-    const updatedItem = stockItems.find((item) => item.id === selectedItem); // Match by ID
-    console.log("Updated Item:", updatedItem); // Check if the item is found
-    
+    const updatedItem = stockItems.find((item) => item.id === selectedItem);
+    console.log("Updated Item:", updatedItem);
+  
     if (updatedItem) {
       setLoadingAction(true);
   
@@ -84,7 +83,7 @@ export default function AdminDashboard() {
           },
           body: JSON.stringify({
             quantity: change,
-            operation: operation,
+            operation: operation,  // Ensure this is either 'add' or 'subtract'
           }),
         });
   
@@ -107,6 +106,7 @@ export default function AdminDashboard() {
       console.log("Selected item not found");
     }
   };
+  
   
 
   if (isLoading) {
@@ -156,7 +156,7 @@ export default function AdminDashboard() {
                 <Picker.Item
                   key={item.id}
                   label={`${item.name} - ${item.size}`}
-                  value={item.id} // Pass item ID as the value
+                  value={item.id}
                 />
               ))}
             </Picker>
