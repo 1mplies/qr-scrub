@@ -2,7 +2,7 @@ require("dotenv").config();
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
-const authRoutes = require("./routes/auth");  // Import authentication routes
+const authRoutes = require("./routes/auth");
 const { Pool } = require("pg");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
@@ -126,6 +126,17 @@ app.get('/api/auth/qr', async (req, res) => {
   } catch (error) {
     console.error("Error fetching user data:", error);
     res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+// stock route to fetch stock data
+app.get('/api/stock', async (req, res) => {
+  try {
+    const result = await pool.query('SELECT * FROM stock');
+    res.json(result.rows);
+  } catch (error) {
+    console.error("Error fetching stock:", error);
+    res.status(500).json({ message: "Failed to fetch stock data." });
   }
 });
 
