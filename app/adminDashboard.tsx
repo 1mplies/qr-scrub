@@ -43,18 +43,21 @@ export default function AdminDashboard() {
     try {
       const response = await fetch("http://localhost:5000/api/stock");
       const data = await response.json();
-      setStockItems(data);
-
-      if (data.length > 0) {
-        // Set the first item as default if items exist
-        setSelectedItem(data[0].id);
+  
+      // Sort by ID to ensure consistent order
+      const sortedData = data.sort((a, b) => a.id - b.id);
+  
+      setStockItems(sortedData);
+  
+      if (sortedData.length > 0) {
+        setSelectedItem(sortedData[0].id);
       }
     } catch (error) {
       console.error("Error fetching stock:", error);
       Alert.alert("Error", "Failed to fetch stock data.");
     }
   };
-
+  
   const handleStockChange = async () => {
     console.log("Button clicked");
   
