@@ -103,7 +103,8 @@ CREATE TABLE public.users (
     email character varying(255) NOT NULL,
     password character varying(255) NOT NULL,
     uuid uuid,
-    full_name character varying(255)
+    full_name character varying(255),
+    role character varying(10) DEFAULT 'user'::character varying
 );
 
 
