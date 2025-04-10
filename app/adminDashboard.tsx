@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, Alert, ActivityIndicator, FlatList, TextInput, 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useRouter } from "expo-router";
 import { Picker } from '@react-native-picker/picker';
+import { ScrollView } from "react-native";
 
 export default function AdminDashboard() {
   const [isLoading, setIsLoading] = useState(true);
@@ -122,7 +123,7 @@ export default function AdminDashboard() {
     <View style={styles.container}>
       <Text style={styles.title}>Admin Dashboard</Text>
       {isAdmin ? (
-        <>
+        <ScrollView contentContainerStyle={styles.scrollContent} style={{ width: "100%" }}>
           <Text style={styles.subtitle}>Stock:</Text>
           <View style={styles.tableContainer}>
             <View style={styles.tableHeader}>
@@ -130,7 +131,7 @@ export default function AdminDashboard() {
               <Text style={styles.tableHeaderText}>Size</Text>
               <Text style={styles.tableHeaderText}>Quantity</Text>
             </View>
-
+  
             <FlatList
               data={stockItems}
               renderItem={({ item }) => (
@@ -141,9 +142,10 @@ export default function AdminDashboard() {
                 </View>
               )}
               keyExtractor={(item) => item.id.toString()}
+              scrollEnabled={false}
             />
           </View>
-
+  
           <View style={styles.inputContainer}>
             <Text style={styles.inputLabel}>Select Item:</Text>
             <Picker
@@ -160,7 +162,7 @@ export default function AdminDashboard() {
                 />
               ))}
             </Picker>
-
+  
             <Text style={styles.inputLabel}>Operation:</Text>
             <Picker
               selectedValue={operation}
@@ -170,7 +172,7 @@ export default function AdminDashboard() {
               <Picker.Item label="Add" value="add" />
               <Picker.Item label="Subtract" value="subtract" />
             </Picker>
-
+  
             <Text style={styles.inputLabel}>Quantity:</Text>
             <TextInput
               style={styles.input}
@@ -178,14 +180,14 @@ export default function AdminDashboard() {
               value={quantity.toString()}
               onChangeText={(text) => setQuantity(text)}
             />
-
+  
             <Button
               title={loadingAction ? "Processing..." : "Update Stock"}
               onPress={handleStockChange}
               disabled={loadingAction}
             />
           </View>
-        </>
+        </ScrollView>
       ) : (
         <Text>You do not have admin privileges.</Text>
       )}
@@ -197,8 +199,18 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
+    justifyContent: "flex-start",
     padding: 20,
     backgroundColor: "#99CCFF",
+    width: "100%",
+  },
+  scrollContent: {
+    paddingBottom: 40,
+    paddingTop: 10,
+    alignItems: "center",
+    width: "100%",
+    maxWidth: 1000,
+    alignSelf: "center",
   },
   title: {
     fontSize: 24,
