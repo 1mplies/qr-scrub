@@ -17,14 +17,14 @@ export default function LoginScreen() {
       setError("Please enter a valid email address.");
       return;
     }
-
+  
     if (!password) {
       setError("Please enter your password.");
       return;
     }
-
+  
     setError(""); // Clear any previous errors
-
+  
     try {
       // Send POST request to login API
       const response = await fetch("http://localhost:5000/api/auth/login", {
@@ -34,16 +34,20 @@ export default function LoginScreen() {
         },
         body: JSON.stringify({ email, password }),
       });
-
+  
       const data = await response.json();
-
+  
       if (response.ok) {
         // Save the authentication token and user role to AsyncStorage
         await AsyncStorage.setItem("authToken", data.token);
-        await AsyncStorage.setItem("userRole", data.role);
-
-        // Navigate to the QR page after successful login
-        router.push("/qr"); 
+        await AsyncStorage.setItem("userRole", data.role);  // Save the role
+  
+        // Check if the user is an admin and navigate accordingly
+        if (data.role === "admin") {
+          router.push("/adminDashboard");  // Navigate to Admin Dashboard
+        } else {
+          router.push("/qr");  // Navigate to QR page for regular users
+        }
       } else {
         // Display error message if login fails
         setError(data.message || "Login failed. Please try again.");

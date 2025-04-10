@@ -47,7 +47,12 @@ router.get("/qr", authenticateToken, async (req, res) => {
 // Register new user
 router.post("/register", async (req, res) => {
   try {
-    const { email, password, username, fullName } = req.body;
+    const { email, password, username, fullName, role } = req.body;
+
+    // Ensure the role is passed
+    if (!role) {
+      return res.status(400).json({ message: "Role is required" });
+    }
 
     // Check if user already exists
     const userExists = await pool.query("SELECT id FROM users WHERE email = $1", [email]);
@@ -59,13 +64,13 @@ router.post("/register", async (req, res) => {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
-    //generate UUID
+    // Generate UUID
     const userUUID = uuidv4();
 
-    // Insert user & uuid into the database
+    // Insert user & uuid into the database with role
     const result = await pool.query(
-      'INSERT INTO users (username, email, password, uuid, full_name) VALUES ($1, $2, $3, $4, $5) RETURNING id, username, email, uuid, full_name',
-      [username, email, hashedPassword, userUUID, fullName]
+      'INSERT INTO users (username, email, password, uuid, full_name, role) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id, username, email, uuid, full_name, role',
+      [username, email, hashedPassword, userUUID, fullName, role]
     );
 
     res.status(201).json({ message: "User registered successfully", user: result.rows[0] });
@@ -81,7 +86,7 @@ router.post("/login", async (req, res) => {
     const { email, password } = req.body;
 
     // Check if user exists
-    const user = await pool.query("SELECT id, username, email, password FROM users WHERE email = $1", [email]);
+    const user = await pool.query("SELECT id, username, email, password, role FROM users WHERE email = $1", [email]);
     if (user.rows.length === 0) {
       return res.status(400).json({ message: "Invalid email or password" });
     }
@@ -94,12 +99,16 @@ router.post("/login", async (req, res) => {
 
     // Generate JWT token
     const token = jwt.sign(
-      { id: user.rows[0].id, username: user.rows[0].username, email: user.rows[0].email },
+      { id: user.rows[0].id, username: user.rows[0].username, email: user.rows[0].email, role: user.rows[0].role },  // Include role in the payload
       process.env.JWT_SECRET,
       { expiresIn: "1h" }
     );
 
-    res.json({ message: "Login successful", token });
+    res.json({
+      message: "Login successful",
+      token,
+      role: user.rows[0].role,  // Send role along with token
+    });
   } catch (err) {
     console.error("Error during login: ", err.message);
     res.status(500).json({ message: "Server error" });

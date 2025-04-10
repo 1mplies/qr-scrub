@@ -19,31 +19,30 @@ export default function RegisterScreen() {
       setError("Please enter a full name.");
       return;
     }
-
+  
     if (!email || !emailRegex.test(email)) {
       setError("Please enter a valid email address.");
       return;
     }
-
+  
     if (password.length < 6) {
       setError("Password must be at least 6 characters.");
       return;
     }
-
+  
     if (password !== confirmPassword) {
       setError("Passwords do not match.");
       return;
     }
-
+  
     // Ensure role is defined
     if (!role) {
       setError("Role is required.");
       return;
     }
-
-    // Log role to make sure it is being passed correctly
+  
     console.log("Selected Role: ", role);
-
+  
     try {
       const response = await fetch("http://localhost:5000/api/auth/register", {
         method: "POST",
@@ -56,14 +55,14 @@ export default function RegisterScreen() {
           role, // Pass the selected role
         }),
       });
-
+  
       const data = await response.json();
-
+  
       if (!response.ok) {
         setError(data.message || "Registration failed.");
         return;
       }
-
+  
       setError("");
       alert("Registration successful!");
       router.push("/login"); // Redirect to login after successful registration
