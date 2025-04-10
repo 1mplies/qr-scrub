@@ -157,6 +157,7 @@ const styles = StyleSheet.create({
   roleSelection: {
     marginTop: 10,
     marginBottom: 20,
+    gap: 10,
   },
   loginContainer: {
     marginTop: 20,
