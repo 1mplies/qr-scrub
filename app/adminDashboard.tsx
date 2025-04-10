@@ -63,7 +63,7 @@ export default function AdminDashboard() {
   
     const quantityNumber = Number(quantity);
     console.log("Quantity:", quantity, "Converted to Number:", quantityNumber);
-    
+  
     if (!selectedItem || isNaN(quantityNumber) || quantityNumber <= 0) {
       Alert.alert("Invalid Input", "Please select a valid item and provide a valid quantity.");
       return;
@@ -97,6 +97,9 @@ export default function AdminDashboard() {
         if (response.ok) {
           Alert.alert("Success", "Stock updated successfully.");
           fetchStock();  // Refresh stock after the update
+          setSelectedItem('');
+          setQuantity('');
+          setOperation('add');
         } else {
           Alert.alert("Error", data.message || "Failed to update stock.");
         }
