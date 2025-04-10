@@ -154,14 +154,14 @@ export default function AdminDashboard() {
             <Picker
               selectedValue={selectedItem}
               style={styles.dropdown}
-              onValueChange={(itemValue) => setSelectedItem(itemValue)}
+              onValueChange={(itemValue) => setSelectedItem(Number(itemValue))}
             >
-              <Picker.Item label="Select Item" value="" />
+              <Picker.Item label="Select Item" value={-1} /> {/* Default to -1 */}
               {stockItems.map((item) => (
                 <Picker.Item
                   key={item.id}
                   label={`${item.name} - ${item.size}`}
-                  value={item.id}
+                  value={item.id} // Ensure the value is item.id (which is a number)
                 />
               ))}
             </Picker>
@@ -196,7 +196,7 @@ export default function AdminDashboard() {
       )}
     </View>
   );
-}
+}  
 
 const styles = StyleSheet.create({
   container: {
