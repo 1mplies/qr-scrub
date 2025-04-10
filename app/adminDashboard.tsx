@@ -43,9 +43,9 @@ export default function AdminDashboard() {
     try {
       const response = await fetch("http://localhost:5000/api/stock");
       const data = await response.json();
-  
-      // Sort by ID to ensure consistent order
-      const sortedData = data.sort((a, b) => a.id - b.id);
+      
+      //sort by id
+      const sortedData = data.sort((a: any, b: any) => a.id - b.id);
   
       setStockItems(sortedData);
   
@@ -57,7 +57,7 @@ export default function AdminDashboard() {
       Alert.alert("Error", "Failed to fetch stock data.");
     }
   };
-  
+
   const handleStockChange = async () => {
     console.log("Button clicked");
   
